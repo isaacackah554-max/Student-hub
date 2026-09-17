@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>WASSCE Study Hub</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#0f1b35;color:#fff;padding:16px 20px;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px #0002}
+.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:22px;font-weight:800}.logo span{color:#60a5fa}
+nav{display:flex;gap:8px;flex-wrap:wrap}button,.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;cursor:pointer}
+.nav button{background:#1d2b4d;color:#fff}.nav button.active,.primary{background:#2563eb;color:#fff}
+main{max-width:1100px;margin:auto;padding:24px 18px}
+.hero{background:linear-gradient(135deg,#1d4ed8,#27aeea);color:#fff;border-radius:28px;padding:35px;margin-bottom:22px}
+.hero h1{font-size:40px;margin:0 0 8px}.hero p{font-size:18px;line-height:1.6;max-width:700px}
+.search{display:flex;gap:10px;margin-top:20px}.search input{flex:1;padding:15px;border:0;border-radius:14px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 3px 15px #17203312;border:1px solid #e4e9f1}
+.card h3{margin-top:0}.subject{border-top:5px solid #2563eb}.muted{color:#667085}.tag{display:inline-block;background:#e8f0ff;color:#174ea6;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700}
+.section{margin:30px 0}.section h2{font-size:28px}
+.hidden{display:none!important}
+.progressbar{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden}.progressbar div{height:100%;background:#2563eb;width:0}
+.question{margin-bottom:18px}.question p{font-weight:700}.options label{display:block;background:#f8fafc;border:1px solid #e2e8f0;padding:11px;border-radius:10px;margin:7px 0;cursor:pointer}
+.result{font-weight:800;font-size:20px;margin-top:15px}
+.timer{font-size:42px;font-weight:800;text-align:center;margin:15px}
+footer{background:#0f1b35;color:#cbd5e1;padding:28px 18px;margin-top:40px;text-align:center}
+.small{font-size:13px}.link{color:#2563eb;text-decoration:none;font-weight:700}
+@media(max-width:650px){.hero h1{font-size:31px}.search{flex-direction:column}nav{display:none}.nav:after{content:"☰";font-size:26px}}
+</style>
+</head>
+<body>
+<header>
+<div class="nav">
+<div class="logo">WASSCE <span>Study Hub</span></div>
+<nav>
+<button class="active" onclick="showPage('home',this)">Home</button>
+<button onclick="showPage('subjects',this)">Subjects</button>
+<button onclick="showPage('practice',this)">Past Questions</button>
+<button onclick="showPage('tools',this)">Study Tools</button>
+</nav>
+</div>
+</header>
+
+<main>
+<section id="home">
+<div class="hero">
+<h1>Your WASSCE preparation starts here.</h1>
+<p>Organise your study time, practise exam-style questions, test yourself with quizzes and track your progress from one place.</p>
+<div class="search"><input id="searchBox" placeholder="Search subjects, topics or resources"><button class="primary" onclick="searchSite()">Search</button></div>
+</div>
+<div class="grid">
+<div class="card"><h2>📚 8</h2><p class="muted">Subjects</p></div>
+<div class="card"><h2>📝 40+</h2><p class="muted">Practice questions</p></div>
+<div class="card"><h2>⏱️</h2><p class="muted">Study timer</p></div>
+<div class="card"><h2>📊</h2><p class="muted">Progress tracking</p></div>
+</div>
+<div class="section">
+<h2>Quick start</h2>
+<div class="grid">
+<div class="card"><span class="tag">PRACTICE</span><h3>Practice questions</h3><p>Test yourself with original WASSCE-style questions.</p><button class="primary" onclick="showPage('practice')">Start practice</button></div>
+<div class="card"><span class="tag">PLANNER</span><h3>Study timetable</h3><p>Use the built-in planner to organise your sessions.</p><button onclick="showPage('tools')">Open tools</button></div>
+</div>
+</div>
+</section>
+
+<section id="subjects" class="hidden">
+<h2>Subjects</h2>
+<p class="muted">Choose a subject to begin practising.</p>
+<div class="grid" id="subjectGrid"></div>
+</section>
+
+<section id="practice" class="hidden">
+<h2>Past Questions & Practice</h2>
+<div class="card">
+<p><strong>Important:</strong> The questions below are original WASSCE-style practice questions, not copied past examination papers. Full copyrighted past papers can be added when you provide the files or where you have permission to use them.</p>
+<p>For official WAEC material, use the <a class="link" href="https://waecgh.org/chief-examiners-report/" target="_blank" rel="noopener">WAEC Chief Examiner's Reports</a>, which include WASSCE reports and examiner feedback.</p>
+</div>
+<div id="quiz"></div>
+<button class="primary" onclick="gradeQuiz()">Submit answers</button>
+<div id="score" class="result"></div>
+</section>
+
+<section id="tools" class="hidden">
+<h2>Study Tools</h2>
+<div class="grid">
+<div class="card">
+<h3>⏱️ Study Timer</h3>
+<div class="timer" id="timer">25:00</div>
+<div style="display:flex;gap:8px;justify-content:center">
+<button class="primary" onclick="startTimer()">Start</button><button onclick="pauseTimer()">Pause</button><button onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<div class="card">
+<h3>📅 My Study Plan</h3>
+<p>Suggested 2-hour session</p>
+<ul><li>30 min Biology / ADF</li><li>30 min Mathematics</li><li>30 min Science</li><li>30 min Past-question practice</li></ul>
+</div>
+<div class="card">
+<h3>📊 Progress</h3>
+<p>Practice completion</p>
+<div class="progressbar"><div id="progress"></div></div>
+<p id="progressText">0% completed</p>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<p><strong>WASSCE Study Hub</strong></p>
+<p class="small">Built for study and revision. Always verify examination information with official WAEC sources.</p>
+</footer>
+
+<script>
+const subjects=[
+"Core Mathematics","Biology","Physics","Chemistry","Social Studies","ADF","English Language","Additional Mathematics"
+];
+
+const questions=[
+{subject:"Core Mathematics",q:"If 3x + 5 = 20, what is x?",o:["3","5","7","15"],a:1},
+{subject:"Core Mathematics",q:"A trader buys an item for GH₵80 and sells it for GH₵100. What is the percentage profit?",o:["20%","25%","30%","80%"],a:1},
+{subject:"Biology",q:"Which organelle is mainly responsible for aerobic respiration in a cell?",o:["Ribosome","Nucleus","Mitochondrion","Vacuole"],a:2},
+{subject:"Biology",q:"Which process do green plants use to manufacture organic food?",o:["Respiration","Photosynthesis","Excretion","Transpiration"],a:1},
+{subject:"Physics",q:"Which quantity is measured in newtons?",o:["Energy","Power","Force","Pressure"],a:2},
+{subject:"Physics",q:"A car travels 120 km in 2 hours. What is its average speed?",o:["30 km/h","60 km/h","120 km/h","240 km/h"],a:1},
+{subject:"Chemistry",q:"What is the chemical symbol for sodium?",o:["So","S","Na","Sn"],a:2},
+{subject:"Chemistry",q:"A solution with pH 2 is best described as:",o:["Strongly acidic","Neutral","Weakly alkaline","Strongly alkaline"],a:0},
+{subject:"Social Studies",q:"Which institution is primarily responsible for making laws in a constitutional democracy?",o:["Legislature","Police","Judiciary","Electoral commission"],a:0},
+{subject:"Social Studies",q:"Which of the following can contribute to national development?",o:["Destruction of public property","Responsible citizenship","Examination malpractice","Illegal dumping"],a:1},
+{subject:"ADF",q:"Which practice helps reduce soil erosion on sloping farmland?",o:["Contour farming","Bush burning","Overgrazing","Deforestation"],a:0},
+{subject:"ADF",q:"Which record can help a farmer determine income and expenditure?",o:["Farm account","Weather chart","Soil profile","Field map"],a:0},
+{subject:"English Language",q:"Choose the word closest in meaning to 'rapid'.",o:["Slow","Swift","Weak","Late"],a:1},
+{subject:"English Language",q:"Choose the correctly spelled word.",o:["Accomodation","Accommodation","Acommodation","Accommmodation"],a:1},
+{subject:"Additional Mathematics",q:"If f(x)=2x+3, find f(4).",o:["8","10","11","12"],a:2},
+{subject:"Additional Mathematics",q:"What is the gradient of the line y=3x-7?",o:["-7","-3","3","7"],a:2}
+];
+
+function showPage(id,btn){
+document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+window.scrollTo(0,0);
+}
+function buildSubjects(){
+const g=document.getElementById('subjectGrid');
+g.innerHTML=subjects.map((s,i)=>`<div class="card subject"><span class="tag">SUBJECT ${i+1}</span><h3>${s}</h3><p>Revision topics, practice and self-testing.</p><button class="primary" onclick="filterQuiz('${s}')">Practise</button></div>`).join('');
+}
+function renderQuiz(list=questions){
+document.getElementById('quiz').innerHTML=list.map((x,i)=>`<div class="card question"><span class="tag">${x.subject}</span><p>${i+1}. ${x.q}</p><div class="options">${x.o.map((v,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${v}</label>`).join('')}</div></div>`).join('');
+document.getElementById('score').textContent='';
+}
+function filterQuiz(subject){showPage('practice');renderQuiz(questions.filter(q=>q.subject===subject));}
+function gradeQuiz(){
+const qs=document.querySelectorAll('.question');let correct=0,answered=0;
+qs.forEach((box,i)=>{const chosen=box.querySelector('input:checked');if(chosen){answered++;const original=[...document.querySelectorAll('.question')];const qdata=questions.find(q=>q.q===box.querySelector('p').textContent.replace(/^\d+\.\s/,'').trim());if(qdata && Number(chosen.value)===qdata.a)correct++;}});
+document.getElementById('score').textContent=`Score: ${correct}/${qs.length} (${qs.length?Math.round(correct/qs.length*100):0}%). Answered: ${answered}/${qs.length}.`;
+localStorage.setItem('wassceProgress',Math.min(100,Math.round((correct/Math.max(1,qs.length))*100)));
+updateProgress();
+}
+function searchSite(){
+const term=document.getElementById('searchBox').value.toLowerCase().trim();
+if(!term){showPage('subjects');return}
+const found=subjects.filter(s=>s.toLowerCase().includes(term));
+showPage('subjects');
+const g=document.getElementById('subjectGrid');
+g.innerHTML=found.length?found.map(s=>`<div class="card subject"><h3>${s}</h3><button class="primary" onclick="filterQuiz('${s}')">Practise</button></div>`).join(''):`<div class="card"><h3>No matching subject</h3><p>Try Mathematics, Biology, Physics, Chemistry, English or another subject.</p></div>`;
+}
+let seconds=1500,timerId=null;
+function updateTimer(){document.getElementById('timer').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;}
+function startTimer(){if(timerId)return;timerId=setInterval(()=>{if(seconds>0){seconds--;updateTimer()}else pauseTimer()},1000)}
+function pauseTimer(){clearInterval(timerId);timerId=null}
+function resetTimer(){pauseTimer();seconds=1500;updateTimer()}
+function updateProgress(){const p=Number(localStorage.getItem('wassceProgress')||0);document.getElementById('progress').style.width=p+'%';document.getElementById('progressText').textContent=p+'% completed'}
+buildSubjects();renderQuiz();updateProgress();updateTimer();
+</script>
+</body>
+</html>
